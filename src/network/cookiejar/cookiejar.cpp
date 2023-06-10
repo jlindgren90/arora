@@ -67,6 +67,7 @@
 
 #include <qapplication.h>
 #include <qdir.h>
+#include <qdatastream.h>
 #include <qmetaobject.h>
 #include <qsettings.h>
 #include <qurl.h>

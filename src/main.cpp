@@ -34,6 +34,7 @@ void setReasonableSslConfiguration() {
 	}
     }
     conf.setCiphers(wantedCiphers);
+    conf.addCaCertificates(QStringLiteral("/etc/ssl/certs/ca-certificates.crt"));
     QSslConfiguration::setDefaultConfiguration(conf);
 }
 

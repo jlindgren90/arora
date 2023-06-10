@@ -18,24 +18,36 @@
  */
 
 #include "browserapplication.h"
+#include <QSslConfiguration>
+#include <QSslCipher>
 
 #ifdef Q_OS_WIN
 #include "explorerstyle.h"
 #endif
 
+void setReasonableSslConfiguration() {
+    QSslConfiguration conf = QSslConfiguration::defaultConfiguration();
+    QList<QSslCipher> wantedCiphers;
+    Q_FOREACH(const QSslCipher& cipher, conf.ciphers()) {
+        if(cipher.usedBits()>=128) {
+	    wantedCiphers << cipher;
+	}
+    }
+    conf.setCiphers(wantedCiphers);
+    QSslConfiguration::setDefaultConfiguration(conf);
+}
+
 int main(int argc, char **argv)
 {
     Q_INIT_RESOURCE(htmls);
     Q_INIT_RESOURCE(data);
-#ifdef Q_WS_X11
-    QApplication::setGraphicsSystem(QString::fromLatin1("raster"));
-#endif
     BrowserApplication application(argc, argv);
     if (!application.isRunning())
         return 0;
 #ifdef Q_OS_WIN
     application.setStyle(new ExplorerStyle);
 #endif
+    setReasonableSslConfiguration();
     application.newMainWindow();
     return application.exec();
 }

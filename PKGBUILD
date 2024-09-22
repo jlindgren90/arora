@@ -12,7 +12,9 @@ makedepends=(qt5-tools)
 
 build() {
   cd ..
-  qmake PREFIX=/usr QMAKE_CXXFLAGS_RELEASE="${CXXFLAGS} -Wno-deprecated-declarations"
+  # FIXME: prevent linking to Qt_5 versioned symbol std::bad_alloc
+  qmake PREFIX=/usr QMAKE_CXXFLAGS_RELEASE="${CXXFLAGS} \
+   -Wno-deprecated-declarations -fno-exceptions -fno-rtti"
   make
 }
 
